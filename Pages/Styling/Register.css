@@ -1,0 +1,13 @@
+.registerCont{
+    width: 30%;
+    margin: auto;
+    margin-top: 50px;
+    align-items: center;
+    justify-content: center;
+    min-width: 200px;
+}
+
+.registerCont h2{
+    margin-top: 5px;
+    margin-bottom: 30px;
+}
