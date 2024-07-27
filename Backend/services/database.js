@@ -142,6 +142,21 @@ async function closeDb() {
     }
 }
 
+async function IdExist(auth_id) {
+
+    try {
+        console.log(auth_id);
+        const query = 'SELECT EXISTS(SELECT 1 FROM users WHERE auth_id = ?) AS user_exists';
+
+        const row = await dbInstance.get(query, [auth_id]);
+        console.log('Query result:', row); // Debugging statement to check the result
+        return row.user_exists === 1;
+    } catch (error) {
+        console.log('Error checking user existence', error);
+        throw error;
+    }
+}
+
 module.exports = {
     initDb,
     createTables,
@@ -150,5 +165,6 @@ module.exports = {
     listUser,
     listRecipe,
     getTables,
-    closeDb
+    closeDb,
+    IdExist
 }

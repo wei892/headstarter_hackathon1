@@ -45,6 +45,16 @@ app.get('/', (req, res) => {
     res.redirect('http://localhost:5173');
 });
 
+app.get('/check-user/:id', async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const userExists = await db.IdExist(userId);
+        res.status(200).send({ exists: userExists });
+    } catch (error) {
+        console.error('Error checking user existence:', error);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+});
 
 // Running the server
 app.listen(port, async () => {
@@ -74,6 +84,7 @@ app.listen(port, async () => {
         recipe: "Mix chicken, lettuce, and dressing."
     };
     await db.addUserRecipe(userRecipe);
+
 
     // Test listing users
     const users = await db.listUser();
