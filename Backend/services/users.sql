@@ -7,3 +7,6 @@ CREATE TABLE IF NOT EXISTS users (
     gender TEXT NOT NULL,
     activity_level TEXT NOT NULL
 );
+
+
+

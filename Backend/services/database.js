@@ -42,6 +42,47 @@ async function deleteTables() {
     }
 }
 
+async function addUsers(user) { 
+    // Parse json object
+    let { auth_id, initial_weight, goal_weight,
+                height, gender, activity_level } = users;
+
+    try {
+        // Sql query to add a row into the user database
+        let userSql = `INSERT INTO users (auth_id, initial_weight, goal_weight, height, gender, activity_level) VALUES (?, ?, ? ,? ,? ,?)`;
+
+        // Parsed information from json to enter into each column
+        let userInput = [auth_id, initial_weight, goal_weight, height, gender, activity_level];
+
+        // Performing the operation
+        let addOperation = dbInstance.run(userSql, userInput);
+        
+        console.log('Added row into user database');
+    } catch(error) {
+        console.log('Failed to insertg row into user table', error);
+    }
+}
+
+async function addUserRecipe(userRecipe) {
+    // Sql query to add a row into the user database
+    let { auth_id, recipe_name, recipe } = userRecipe; 
+
+    try {
+        // Sql operation
+        let recipeSql = `INSERT INTO user_recipe (auth_id, recipe_name, recipe) VALUES (?, ?, ?)`;
+
+        // Parsed information from json to enter into each column
+        let userInput = [auth_id, recipe_name, recipe];
+
+        // Adding row into the table
+        let recipeOperation = await dbInstance.run(recipeSql, userInput);
+
+        console.log('Added row into the user recipe database');
+    } catch(error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     initDb,
     createTables,
