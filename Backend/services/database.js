@@ -21,7 +21,7 @@ async function createTables() {
             CREATE TABLE IF NOT EXISTS users (
                 auth_id TEXT NOT NULL PRIMARY KEY,
                 user_name TEXT NOT NULL,
-                age INTEGER NOT NULL,
+                birthdate DATE NOT NULL,
                 initial_weight INTEGER NOT NULL,
                 goal_weight INTEGER NOT NULL,
                 height INTEGER NOT NULL,
