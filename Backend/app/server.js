@@ -16,12 +16,14 @@ const config = {
     issuerBaseURL: 'https://dev-3selmw8fy6fyr2gt.us.auth0.com/'
   };
   
-  // auth router attaches /login, /logout, and /callback routes to the baseURL
-  app.use(auth(config));
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config));
 
+// Json parser
+app.use(express.json());
 
-  // Calling router
-  app.use('/', routes);
+// Calling router
+app.use('/', routes);
   
 // Port server is listening on
 const port = 8000;
@@ -36,7 +38,7 @@ app.listen(port, async () => {
 
     // Test adding a user
     const user = {
-        auth_id: "user123",
+        auth_id: "user1123",
         user_name: "John Doe",
         birthdate: '2020-01-15',
         initial_weight: 70,

@@ -58,21 +58,19 @@ async function addUsers(user) {
         let checkParams = [auth_id];
         let existingUser = await dbInstance.get(checkSql, checkParams);
         
-        let operation;
-
         if (existingUser) {
-            console.log('User already exists');
-            operation = null;
-            return operation;
+            throw new Error("User already exists");
         }
 
         // Insert the user if they don't exist
         let userSql = `INSERT INTO users (auth_id, user_name, birthdate, initial_weight, goal_weight, height, gender, activity_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
         let userInput = [auth_id, user_name, birthdate, initial_weight, goal_weight, height, gender, activity_level];
-        operation = await dbInstance.run(userSql, userInput);
-        return operation;
+        let operation = await dbInstance.run(userSql, userInput);
+        
+        return { success: true, operation };
     } catch(error) {
-        console.log('Failed to insert row into user table', error);
+        console.error('Failed to insert row into user table', error);
+        return { success: false, error: error.message };
     }
 }
 
@@ -86,8 +84,7 @@ async function addUserRecipe(userRecipe) {
         let existingRecipe = await dbInstance.get(checkSql, checkParams);
 
         if (existingRecipe) {
-            console.log('Recipe already exists for this user');
-            return;
+            throw new Error('Recipe already exists');
         }
 
         // Insert the recipe if it doesn't exist
@@ -96,8 +93,10 @@ async function addUserRecipe(userRecipe) {
         await dbInstance.run(recipeSql, userInput);
 
         console.log('Added row into the user recipe database');
+        return { success: true };
     } catch(error) {
-        console.log(error);
+        console.error(error);
+        return { success: false, error: error.message };
     }
 }
 
