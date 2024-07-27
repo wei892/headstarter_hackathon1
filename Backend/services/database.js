@@ -31,8 +31,20 @@ async function createTables() {
     }
 }
 
+// Function to reset the tables in the databse 
+async function deleteTables() {
+    try {
+        // Deleting the rows for each table 
+        await dbInstance.run(`DELETE FROM users`);
+        await dbInstance.run(`DELETE FROM user_recipes`);
+    } catch(error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     initDb,
-    createTables
+    createTables,
+    deleteTables
 }
 
