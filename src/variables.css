@@ -1,9 +1,21 @@
+
+@import "bootstrap";
+
 :root {
-    --pageColor: #EFE9E1;
-    --text-color: #290907;
-  
+    --white: #ffffff;
+    --dark_brown: #290907;
+    --black: #1A1B22;
     --light_brown: #80634C;
     --dark_green: #739454;
-    --gray: #D0D5CE;
+    --gray: #ebebeb;
     --teal: #7BACBE;
   }
+
+
+.btn-primary {
+    @include button-variant($mynewcolor, darken($mynewcolor, 7.5%), darken($mynewcolor, 10%), lighten($mynewcolor,5%), lighten($mynewcolor, 10%), darken($mynewcolor,30%));
+}
+
+.btn-outline-primary {
+    @include button-outline-variant($mynewcolor, #222222, lighten($mynewcolor,5%), $mynewcolor);
+}
