@@ -3,10 +3,11 @@ import './App.css';
 
 import Header from '../Components/Header';
 import Homepage from '../Pages/Homepage';
-import LandingPage from '../Pages/LandingPage';
+import LoginLogic from '../Pages/LoginLogic.jsx';
 import { useRoutes } from 'react-router-dom';
 import Login from '../Pages/Login';
 import Register from '../Pages/Register';
+import LandingPage from '../Pages/LandingPage.jsx';
 
 
 function App() {

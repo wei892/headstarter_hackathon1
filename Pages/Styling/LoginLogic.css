@@ -1,0 +1,31 @@
+.profileContainer {
+    display: flex;
+    align-items: center;
+    background-color: transparent; /* Remove background color */
+    padding: 0; /* Remove padding */
+    border-radius: 0; /* Remove border radius */
+}
+
+.profileWrapper {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profilePicture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.nick {
+    margin: 0 10px 0 0; /* Adjust margins */
+}
+
+.logout_btn {
+    margin-left: auto; /* Push the button to the right */
+}

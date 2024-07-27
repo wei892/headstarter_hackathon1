@@ -1,26 +1,12 @@
+import React from 'react';
 
-import "./Styling/LandingPage.css"
-
-import Footer from "../Components/Footer";
-import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
-
-const LandingPage = () =>{
-    return(
+const LandingPage = () => {
+    return (
         <div>
-            <div className="defaultPageColor">
-                <Link to="register">
-                    <Button className="signup_btn button" > Sign Up </Button> 
-                </Link>
-                <Link to="login">
-                    <Button className="login_btn button"> Login </Button>
-                </Link>
-
-                LANDING PAGE
-            </div>
-            <Footer />
+            <h1>Landing Page</h1>
+            <p>Welcome to the Fasting App!</p>
         </div>
-    )
-}
+    );
+};
 
 export default LandingPage;
