@@ -9,13 +9,17 @@ const port = 8000;
 
 // Running the server 
 app.listen(port, async () => {
+    // Initialize the database connection
     await db.initDb();
+
+    // Create the tables
     await db.createTables();
-    console.log(await db.getTables());
-    /*
+
     // Test adding a user
     const user = {
         auth_id: "user123",
+        user_name: "John Doe",
+        age: 30,
         initial_weight: 70,
         goal_weight: 65,
         height: 175,
@@ -32,7 +36,16 @@ app.listen(port, async () => {
     };
     await db.addUserRecipe(userRecipe);
 
-    await listUser();
-    await listRecipe();
-    */
+    // Test listing users
+    const users = await db.listUser();
+    console.log('List of users:', users);
+
+    // Test listing recipes
+    const recipes = await db.listRecipe();
+    console.log('List of recipes:', recipes);
+
+    // Test getting tables
+    const tables = await db.getTables();
+    console.log('List of tables:', tables);
+    
 });

@@ -1,26 +1,13 @@
+// db.js
 const sqlite3 = require('sqlite3');
 const sqlite = require('sqlite'); 
-const fs = require('fs')
 
-// Listing all of the tables 
-async function getTables() {
-    let db = await initDb();
-
-    try {
-        let sql = `SELECT name FROM sqlite_master WHERE type = 'table'`;
-        let operation = db.all(sql);
-        return operation
-    } catch(error) {
-        console.log(error);
-    }
-}
-
-// Connection to database 
 let dbInstance; 
+
 async function initDb() {
     dbInstance = await sqlite.open({
         filename: "./FastingDatabase",
-        driver : sqlite3.Database
+        driver: sqlite3.Database
     });
 
     return dbInstance;
@@ -62,31 +49,24 @@ async function createTables() {
     }
 }
 
-// Function to reset the tables in the databse 
-async function deleteTables() {
-    try {
-        // Deleting the rows for each table 
-        await dbInstance.run(`DELETE FROM users`);
-        await dbInstance.run(`DELETE FROM user_recipes`);
-    } catch(error) {
-        console.log(error);
-    }
-}
-
-// Function for adding a user to the user table 
 async function addUsers(user) { 
-    // Parse json object
-    let { auth_id, initial_weight, goal_weight, height, gender, activity_level } = user;
+    let { auth_id, user_name, age, initial_weight, goal_weight, height, gender, activity_level } = user;
 
     try {
-        // Sql query to add a row into the user database
-        let userSql = `INSERT INTO users (auth_id, initial_weight, goal_weight, height, gender, activity_level) VALUES (?, ?, ? ,? ,? ,?)`;
+        // Check if the user already exists
+        let checkSql = `SELECT * FROM users WHERE auth_id = ?`;
+        let checkParams = [auth_id];
+        let existingUser = await dbInstance.get(checkSql, checkParams);
 
-        // Parsed information from json to enter into each column
-        let userInput = [auth_id, initial_weight, goal_weight, height, gender, activity_level];
+        if (existingUser) {
+            console.log('User already exists');
+            return;
+        }
 
-        // Performing the operation
-        let addOperation = await dbInstance.run(userSql, userInput);
+        // Insert the user if they don't exist
+        let userSql = `INSERT INTO users (auth_id, user_name, age, initial_weight, goal_weight, height, gender, activity_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        let userInput = [auth_id, user_name, age, initial_weight, goal_weight, height, gender, activity_level];
+        await dbInstance.run(userSql, userInput);
         
         console.log('Added row into user database');
     } catch(error) {
@@ -94,20 +74,24 @@ async function addUsers(user) {
     }
 }
 
-// Function for adding a user to the recipe table 
 async function addUserRecipe(userRecipe) {
-    // Sql query to add a row into the user database
     let { auth_id, recipe_name, recipe } = userRecipe; 
 
     try {
-        // Sql operation
+        // Check if the recipe already exists
+        let checkSql = `SELECT * FROM user_recipes WHERE auth_id = ? AND recipe_name = ?`;
+        let checkParams = [auth_id, recipe_name];
+        let existingRecipe = await dbInstance.get(checkSql, checkParams);
+
+        if (existingRecipe) {
+            console.log('Recipe already exists for this user');
+            return;
+        }
+
+        // Insert the recipe if it doesn't exist
         let recipeSql = `INSERT INTO user_recipes (auth_id, recipe_name, recipe) VALUES (?, ?, ?)`;
-
-        // Parsed information from json to enter into each column
         let userInput = [auth_id, recipe_name, recipe];
-
-        // Adding row into the table
-        let recipeOperation = await dbInstance.run(recipeSql, userInput);
+        await dbInstance.run(recipeSql, userInput);
 
         console.log('Added row into the user recipe database');
     } catch(error) {
@@ -115,11 +99,8 @@ async function addUserRecipe(userRecipe) {
     }
 }
 
-// Function to display all of the rows in the tables 
-
-// User table
 async function listUser() {
-    let sqlQuery = `SELECT * FROM user`; 
+    let sqlQuery = `SELECT * FROM users`; // Corrected table name
     
     try {
         const userRows = await dbInstance.all(sqlQuery);
@@ -129,26 +110,43 @@ async function listUser() {
     }
 }
 
-// User recipe table
 async function listRecipe() {
-    let sqlQuery = `SELECT * FROM user_recipes`
+    let sqlQuery = `SELECT * FROM user_recipes`;
 
     try {
-        let recipeRow = dbInstance.all(sqlQuery);
+        let recipeRow = await dbInstance.all(sqlQuery);
         return recipeRow;
     } catch(error) {
         console.log(error);
     }
 }
 
+async function getTables() {
+    let db = await initDb();
+
+    try {
+        let sql = `SELECT name FROM sqlite_master WHERE type = 'table'`;
+        let operation = await db.all(sql);
+        return operation;
+    } catch(error) {
+        console.log(error);
+    }
+}
+
+async function closeDb() {
+    if (dbInstance) {
+        await dbInstance.close();
+        console.log('Database connection closed');
+    }
+}
+
 module.exports = {
     initDb,
     createTables,
-    deleteTables,
     addUsers,
     addUserRecipe,
     listUser,
     listRecipe,
-    getTables
+    getTables,
+    closeDb
 }
-
