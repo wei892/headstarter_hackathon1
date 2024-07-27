@@ -24,6 +24,9 @@ const Header = () => {
                     </Col>
                 </Row>
             </Container>
+            <div className='btm_border'>
+
+            </div>
         </div>
     );
 }

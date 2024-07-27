@@ -1,0 +1,9 @@
+.tileCard{
+    height: 240px;
+    border: 2px solid var(--gray);
+    border-radius: 5px;
+}
+
+.title{
+    padding: 10px;
+}

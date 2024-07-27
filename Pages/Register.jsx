@@ -194,7 +194,7 @@ const Register = () => {
                         </Form.Group>
 
                         <Form.Group as={Row} className="mb-3" controlId="formHeight">
-                            <Form.Label column sm={3}>Goal Weight</Form.Label>
+                            <Form.Label column sm={3}>Height</Form.Label>
                             <Col sm={3} required aria-required>
                                 <Form.Control id="formHeight" type="number" placeholder="0" value={height} onChange={handleHeightSelect} />
                             </Col>
