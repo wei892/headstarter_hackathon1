@@ -6,3 +6,11 @@
     justify-content: center;
     min-width: 200px;
 }
+
+.inputBox{
+    margin-top: 10px;
+}
+
+.btn{
+    margin-right: 10px;
+}
