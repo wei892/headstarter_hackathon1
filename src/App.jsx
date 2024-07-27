@@ -5,17 +5,17 @@ import Header from '../Components/Header';
 import Homepage from '../Pages/Homepage';
 import LoginLogic from '../Pages/LoginLogic.jsx';
 import { useRoutes } from 'react-router-dom';
-import Login from '../Pages/Login';
-import Register from '../Pages/Register';
+// import Login from '../Pages/Login';
+import Register from '../Pages/Register.jsx';
 import LandingPage from '../Pages/LandingPage.jsx';
 
 
 function App() {
 
   let linkElements = useRoutes([
-    {path: "/", element: <LandingPage />}, //landing page
-    {path: "home_page/*", element: <Homepage />}, //user home page
-    {path: "login/", element: <Login />},
+    {path: "landing/", element: <LandingPage />}, //landing page
+    {path: "/*", element: <Homepage />}, //user home page
+    // {path: "login/", element: <Login />},
     {path: "register/", element: <Register />},
   ])
 
