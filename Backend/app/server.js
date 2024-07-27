@@ -46,6 +46,21 @@ app.get('/', (req, res) => {
 });
 
 
+app.get('/check-user/:id', async (req, res) => {
+    const userId = { auth_id: req.params.id }; // Wrap userId in an object to pass to IdExist
+    try {
+        const userExists = await db.IdExist(userId); // Use IdExist method
+        if (userExists) {
+            res.status(200).send({ exists: true });
+        } else {
+            res.status(404).send({ exists: false });
+        }
+    } catch (error) {
+        console.error('Error checking user existence:', error);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+});
+
 // Running the server
 app.listen(port, async () => {
     // Initialize the database connection
@@ -56,7 +71,7 @@ app.listen(port, async () => {
 
     // Test adding a user
     const user = {
-        auth_id: "user123",
+        auth_id: "user1",
         user_name: "John Doe",
         birthdate: '2020-01-15',
         initial_weight: 70,

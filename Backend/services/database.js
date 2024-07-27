@@ -1,6 +1,7 @@
 // db.js
 const sqlite3 = require('sqlite3');
-const sqlite = require('sqlite'); 
+const sqlite = require('sqlite');
+const db = require("./database");
 
 let dbInstance; 
 
@@ -73,6 +74,20 @@ async function addUsers(user) {
         return operation;
     } catch(error) {
         console.log('Failed to insert row into user table', error);
+    }
+}
+async function IdExist(auth_id) {
+
+    try {
+        let IdAuth = auth_id.auth_id;
+        const query = 'SELECT EXISTS(SELECT 1 FROM users WHERE auth_id = ?) AS user_exists';
+
+        const row = await dbInstance.get(query, [IdAuth]);
+        console.log('Query result:', row); // Debugging statement to check the result
+        return row.user_exists === 1;
+    } catch (error) {
+        console.log('Error checking user existence', error);
+        throw error;
     }
 }
 
@@ -150,5 +165,7 @@ module.exports = {
     listUser,
     listRecipe,
     getTables,
+    IdExist,
     closeDb
+
 }
