@@ -19,6 +19,8 @@ const config = {
   // auth router attaches /login, /logout, and /callback routes to the baseURL
   app.use(auth(config));
 
+
+  // Calling router
   app.use('/', routes);
   
 // Port server is listening on
@@ -36,7 +38,7 @@ app.listen(port, async () => {
     const user = {
         auth_id: "user123",
         user_name: "John Doe",
-        birthdate: 30,
+        birthdate: '2020-01-15',
         initial_weight: 70,
         goal_weight: 65,
         height: 175,
@@ -64,5 +66,4 @@ app.listen(port, async () => {
     // Test getting tables
     const tables = await db.getTables();
     console.log('List of tables:', tables);
-    
 });

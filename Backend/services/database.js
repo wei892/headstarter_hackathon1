@@ -50,25 +50,27 @@ async function createTables() {
 }
 
 async function addUsers(user) { 
-    let { auth_id, user_name, age, initial_weight, goal_weight, height, gender, activity_level } = user;
+    let { auth_id, user_name, birthdate, initial_weight, goal_weight, height, gender, activity_level } = user;
 
     try {
         // Check if the user already exists
         let checkSql = `SELECT * FROM users WHERE auth_id = ?`;
         let checkParams = [auth_id];
         let existingUser = await dbInstance.get(checkSql, checkParams);
+        
+        let operation;
 
         if (existingUser) {
             console.log('User already exists');
-            return;
+            operation = null;
+            return operation;
         }
 
         // Insert the user if they don't exist
-        let userSql = `INSERT INTO users (auth_id, user_name, age, initial_weight, goal_weight, height, gender, activity_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-        let userInput = [auth_id, user_name, age, initial_weight, goal_weight, height, gender, activity_level];
-        await dbInstance.run(userSql, userInput);
-        
-        console.log('Added row into user database');
+        let userSql = `INSERT INTO users (auth_id, user_name, birthdate, initial_weight, goal_weight, height, gender, activity_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        let userInput = [auth_id, user_name, birthdate, initial_weight, goal_weight, height, gender, activity_level];
+        operation = await dbInstance.run(userSql, userInput);
+        return operation;
     } catch(error) {
         console.log('Failed to insert row into user table', error);
     }
