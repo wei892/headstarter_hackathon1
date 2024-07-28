@@ -9,7 +9,8 @@ const GraphCard = ({title}) =>{
             </div>
 
             <div className="graphCont">
-                afd
+                <img src="https://www.economist.com/sites/default/files/images/print-edition/20220122_CUD001_0.jpg"
+                     className="scaled-image"/>
             </div>
         </div>
     )

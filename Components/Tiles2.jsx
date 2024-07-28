@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Tiles.css"
 
-const TileCard = ({title, items}) => {
+const TileCard2 = ({title, items}) => {
 
     //call recipes data
     const [arrItems, setArrItems] = useState([]);
@@ -58,4 +58,4 @@ const TileCard = ({title, items}) => {
     )
 }
 
-export default TileCard;
+export default TileCard2;

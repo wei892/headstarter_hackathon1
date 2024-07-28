@@ -11,11 +11,10 @@ const Header = () => {
                 <Row>
                     <Col xs={2} md={1} lg={1} className="logo">
                         <Link to="/" className='linkToLanding'>
-                            <div className='circle_logo'></div>
                         </Link>
                     </Col>
                     <Col xs={10} md={11} lg={11} className="app-name">
-                        <h2> Fasting App Name </h2>
+                        <img src="/public/img.png" alt="Logo" className="app-logo" />
                     </Col>
                 </Row>
                 <Row>
@@ -24,9 +23,7 @@ const Header = () => {
                     </Col>
                 </Row>
             </Container>
-            <div className='btm_border'>
-
-            </div>
+            <div className='btm_border'></div>
         </div>
     );
 }

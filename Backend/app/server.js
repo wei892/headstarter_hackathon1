@@ -3,11 +3,50 @@ const cors = require('cors');
 const { auth, requiresAuth } = require('express-openid-connect');
 const routes = require('../routes/router');
 const db = require('../services/database');
+const OpenAI = require('openai');
+require('dotenv').config();
 
-// App
 const app = express();
 
+// Place this line before any routes are defined
 app.use(express.json());
+
+app.use(cors({
+    origin: 'http://localhost:5173', // Allow only your frontend origin
+    credentials: true
+}));
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY // Make sure to set this environment variable
+});
+
+app.post('/api/openai', async (req, res) => {
+    try {
+        console.log('Received request:', req.body);
+        if (!req.body.message) {
+            return res.status(400).send({ error: 'No message provided' });
+        }
+
+        const completion = await openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [{ role: "user", content: req.body.message }],
+            temperature: 0.7,
+        });
+
+        console.log('OpenAI API Response:', JSON.stringify(completion, null, 2));
+        res.json(completion.choices[0].message);
+    } catch (error) {
+        console.error('Error calling OpenAI API:', error);
+        res.status(500).json({
+            error: 'Error calling OpenAI API',
+            details: error.toString(),
+            stack: error.stack,
+            message: error.message
+        });
+    }
+});
+
+
 
 app.use(cors({
     origin: 'http://localhost:5173', // Allow only your frontend origin
@@ -45,18 +84,59 @@ app.get('/', (req, res) => {
     res.redirect('http://localhost:5173');
 });
 
-
 app.get('/check-user/:id', async (req, res) => {
-    const userId = { auth_id: req.params.id }; // Wrap userId in an object to pass to IdExist
+    const userId = req.params.id;
     try {
-        const userExists = await db.IdExist(userId); // Use IdExist method
-        if (userExists) {
-            res.status(200).send({ exists: true });
-        } else {
-            res.status(404).send({ exists: false });
-        }
+        const userExists = await db.IdExist(userId);
+        res.status(200).send({ exists: userExists });
     } catch (error) {
         console.error('Error checking user existence:', error);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+});
+app.post('/add-user', async (req, res) => {
+    const user = req.body;
+    try {
+        const result = await db.addUsers(user);
+        if (result === null) {
+            res.status(400).send({ error: 'User already exists' });
+        } else {
+            res.status(200).send({ success: 'User added successfully' });
+        }
+    } catch (error) {
+        console.error('Error adding user:', error);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+});
+
+app.get('/users', async (req, res) => {
+    try {
+        const users = await db.listUser();
+        res.status(200).send(users);
+    } catch (error) {
+        console.error('Error listing users:', error);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+});
+
+
+app.get('/users-schema', async (req, res) => {
+    try {
+        const schema = await db.getUsersSchema();
+        res.status(200).json(schema);
+    } catch (error) {
+        console.error('Error retrieving users schema:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.post('/add-user-recipe', async (req, res) => {
+    const userRecipe = req.body;
+    try {
+        await db.addUserRecipe(userRecipe);
+        res.status(200).send({ success: 'Recipe added successfully' });
+    } catch (error) {
+        console.error('Error adding user recipe:', error);
         res.status(500).send({ error: 'Internal Server Error' });
     }
 });
@@ -70,17 +150,16 @@ app.listen(port, async () => {
     await db.createTables();
 
     // Test adding a user
-    const user = {
-        auth_id: "user1",
-        user_name: "John Doe",
-        birthdate: '2020-01-15',
-        initial_weight: 70,
-        goal_weight: 65,
-        height: 175,
-        gender: "male",
-        activity_level: "moderate"
-    };
-    await db.addUsers(user);
+
+    app.get('/recipes', async (req, res) => {
+        try {
+            const recipes = await db.listRecipe();
+            res.status(200).send(recipes);
+        } catch (error) {
+            console.error('Error listing recipes:', error);
+            res.status(500).send({ error: 'Internal Server Error' });
+        }
+    });
 
     // Test adding a user recipe
     const userRecipe = {
@@ -89,6 +168,7 @@ app.listen(port, async () => {
         recipe: "Mix chicken, lettuce, and dressing."
     };
     await db.addUserRecipe(userRecipe);
+
 
     // Test listing users
     const users = await db.listUser();

@@ -1,9 +1,8 @@
 // db.js
 const sqlite3 = require('sqlite3');
 const sqlite = require('sqlite');
-const db = require("./database");
 
-let dbInstance; 
+let dbInstance;
 
 async function initDb() {
     dbInstance = await sqlite.open({
@@ -13,6 +12,19 @@ async function initDb() {
 
     return dbInstance;
 }
+
+async function getUsersSchema() {
+    try {
+        const query = `PRAGMA table_info(users);`;
+        const schema = await dbInstance.all(query);
+        return schema;
+    } catch (error) {
+        console.error('Error fetching users schema:', error);
+        throw error;
+    }
+}
+
+
 
 async function createTables() {
     const db = await initDb();
@@ -50,15 +62,15 @@ async function createTables() {
     }
 }
 
-async function addUsers(user) { 
-    let { auth_id, user_name, birthdate, initial_weight, goal_weight, height, gender, activity_level } = user;
+async function addUsers(user) {
+    let { auth_id, user_name, age, initial_weight, goal_weight, height, gender, activity_level } = user;
 
     try {
         // Check if the user already exists
         let checkSql = `SELECT * FROM users WHERE auth_id = ?`;
         let checkParams = [auth_id];
         let existingUser = await dbInstance.get(checkSql, checkParams);
-        
+
         let operation;
 
         if (existingUser) {
@@ -68,31 +80,16 @@ async function addUsers(user) {
         }
 
         // Insert the user if they don't exist
-        let userSql = `INSERT INTO users (auth_id, user_name, birthdate, initial_weight, goal_weight, height, gender, activity_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-        let userInput = [auth_id, user_name, birthdate, initial_weight, goal_weight, height, gender, activity_level];
+        let userSql = `INSERT INTO users (auth_id, user_name, age, initial_weight, goal_weight, height, gender, activity_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        let userInput = [auth_id, user_name, age, initial_weight, goal_weight, height, gender, activity_level];
         operation = await dbInstance.run(userSql, userInput);
         return operation;
-    } catch(error) {
+    } catch (error) {
         console.log('Failed to insert row into user table', error);
     }
 }
-async function IdExist(auth_id) {
-
-    try {
-        let IdAuth = auth_id.auth_id;
-        const query = 'SELECT EXISTS(SELECT 1 FROM users WHERE auth_id = ?) AS user_exists';
-
-        const row = await dbInstance.get(query, [IdAuth]);
-        console.log('Query result:', row); // Debugging statement to check the result
-        return row.user_exists === 1;
-    } catch (error) {
-        console.log('Error checking user existence', error);
-        throw error;
-    }
-}
-
 async function addUserRecipe(userRecipe) {
-    let { auth_id, recipe_name, recipe } = userRecipe; 
+    let { auth_id, recipe_name, recipe } = userRecipe;
 
     try {
         // Check if the recipe already exists
@@ -116,9 +113,11 @@ async function addUserRecipe(userRecipe) {
     }
 }
 
+
+
 async function listUser() {
     let sqlQuery = `SELECT * FROM users`; // Corrected table name
-    
+
     try {
         const userRows = await dbInstance.all(sqlQuery);
         return userRows;
@@ -157,6 +156,21 @@ async function closeDb() {
     }
 }
 
+async function IdExist(auth_id) {
+
+    try {
+        console.log(auth_id);
+        const query = 'SELECT EXISTS(SELECT 1 FROM users WHERE auth_id = ?) AS user_exists';
+
+        const row = await dbInstance.get(query, [auth_id]);
+        console.log('Query result:', row); // Debugging statement to check the result
+        return row.user_exists === 1;
+    } catch (error) {
+        console.log('Error checking user existence', error);
+        throw error;
+    }
+}
+
 module.exports = {
     initDb,
     createTables,
@@ -165,7 +179,7 @@ module.exports = {
     listUser,
     listRecipe,
     getTables,
+    closeDb,
     IdExist,
-    closeDb
-
+    getUsersSchema
 }
