@@ -15,8 +15,7 @@ function App() {
   let linkElements = useRoutes([
     {path: "landing/", element: <LandingPage />}, //landing page
     {path: "/*", element: <Homepage />}, //user home page
-    // {path: "login/", element: <Login />},
-    {path: "register/", element: <Register />},
+    // {path: "login/", element: <Login />}
   ])
 
   return (

@@ -38,7 +38,7 @@ const Dashboard = () => {
                 <Col>
                     <InfoCard className="card"
                         title={"Hours Left Fasting"}
-                        value = {"20hs"}
+                        value = {20}
                     />
                 </Col>
             </Row>
@@ -61,6 +61,7 @@ const Dashboard = () => {
                 </Col>
             </Row>
 
+        <br/>
         </div>
     )
 

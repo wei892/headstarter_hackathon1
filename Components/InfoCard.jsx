@@ -3,7 +3,7 @@ import React from "react";
 import "./InfoCard.css"
 import { Col } from "react-bootstrap";
 
-const InfoCard = ({title, value, className}) => {
+const InfoCard = ({title, value}) => {
     return(
         <div className="infoCard">
             <div className="cardTitle">

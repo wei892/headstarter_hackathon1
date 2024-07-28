@@ -4,7 +4,13 @@ import "./Graph.css"
 const GraphCard = ({title}) =>{
     return(
         <div className="graphCard">
-            <h3> {title} </h3>
+            <div className="title">
+                <h3> {title} </h3>
+            </div>
+
+            <div className="graphCont">
+                afd
+            </div>
         </div>
     )
 }
