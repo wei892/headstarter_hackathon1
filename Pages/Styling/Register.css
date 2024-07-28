@@ -1,5 +1,5 @@
 .registerCont{
-    width: 30%;
+    width: 50%;
     margin: auto;
     margin-top: 50px;
     align-items: center;
@@ -7,7 +7,10 @@
     min-width: 200px;
 }
 
-/* .registerCont h2{
-    margin-top: 5px;
-    margin-bottom: 30px;
-} */
+.inputBox{
+    margin-top: 10px;
+}
+
+.btn{
+    margin-right: 10px;
+}

@@ -1,5 +1,5 @@
 import "./Styling/LoginLogic.css";
-import Footer from "../Components/Footer";
+// import Footer from "../Components/Footer";
 import { Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 

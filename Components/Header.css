@@ -5,7 +5,7 @@
 }
 
 .header_bgcolor {
-  background-color: var(--gray);
+  /* background-color: var(--gray); */
   padding: 0;
   margin: 0;
   width: 100%;
@@ -43,7 +43,6 @@
 .app-name {
   /* color: var(--white); */
   font-weight: bold;
-
 }
 
 .linkToLanding{
@@ -52,4 +51,10 @@
     margin: 0px;
     color: var(--black);
     
+}
+
+.btm_border{
+  width: 100%;
+  background-color: rgb(213, 213, 213);
+  height: 1px;
 }
